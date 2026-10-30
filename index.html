@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul SMS Bomber</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #0d0d0d;
+            color: #00ff41;
+            padding: 15px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            background: #1a1a1a;
+        }
+        h2 { text-align: center; color: #00ff41; margin-top: 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; }
+        button { width: 100%; padding: 12px; background: #00ff41; color: black; border: none; font-weight: bold; cursor: pointer; }
+        button:disabled { background: #555; }
+        .log-area { height: 200px; overflow-y: scroll; background: #000; border: 1px solid #333; padding: 10px; margin-top: 15px; font-size: 12px; }
+        .success { color: #00ff41; }
+        .error { color: #ff3333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📱 Abdul Bomber</h2>
+    <label>Target Number:</label>
+    <input type="text" id="target" placeholder="e.g., 919876543210">
+    
+    <label>Count:</label>
+    <input type="number" id="count" value="10">
+    
+    <label>Delay (Sec):</label>
+    <input type="number" id="delay" value="1.0" step="0.1">
+
+    <button id="btn" onclick="start()">START</button>
+    <div class="log-area" id="logs"></div>
+</div>
+
+<script>
+    function log(msg, type='info') {
+        const div = document.createElement('div');
+        div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        div.className = type === 'success' ? 'success' : (type === 'error' ? 'error' : '');
+        document.getElementById('logs').appendChild(div);
+        document.getElementById('logs').scrollTop = document.getElementById('logs').scrollHeight;
+    }
+
+    async function start() {
+        const target = document.getElementById('target').value;
+        const count = parseInt(document.getElementById('count').value);
+        const delay = parseFloat(document.getElementById('delay').value) * 1000;
+        const btn = document.getElementById('btn');
+        
+        if(!target) return alert("Enter number!");
+        
+        btn.disabled = true;
+        document.getElementById('logs').innerHTML = '';
+        log(`[+] Starting for ${target}...`);
+
+        for(let i=1; i<=count; i++) {
+            // Simulation Mode
+            await new Promise(r => setTimeout(r, 500)); 
+            log(`[+] Msg ${i}/${count} Sent`, 'success');
+            
+            if(i < count && delay > 0) await new Promise(r => setTimeout(r, delay));
+        }
+        log("[+] Done!", 'success');
+        btn.disabled = false;
+    }
+</script>
+
+</body>
+</html>
